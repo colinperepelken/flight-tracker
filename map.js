@@ -372,8 +372,34 @@ function addMarker(aircraft) {
 
 function refreshMap() {
 	setInterval(function() {
-		initMap();
-	}, 30000);
+		
+		$.getJSON('map.php', function(data){
+			console.log(data);
+			data['acList'].forEach(function(aircraft){
+				var isNewAircraft = true;
+				var markerToUpdate = null;
+				allMarkers.forEach(function(existingMarker) {
+					if (existingMarker.reg == aircraft['Reg']) {
+						isNewAircraft = false;
+						markerToUpdate = existingMarker.marker;
+					}
+				});
+
+				if (isNewAircraft) { // add a new aircraft
+					addMarker(aircraft);
+				} else { // just update the position of existing marker
+					var latlng = {lat: aircraft['Lat'], lng: aircraft['Long']};
+					markerToUpdate.setPosition(latlng);
+				}
+
+		});
+
+
+	});
+
+
+
+	}, 5000);
 }
 
 function bindInfoWindow(marker, map, infowindow, html) {
