@@ -8,7 +8,13 @@ function initMap() {
 		map = new google.maps.Map(document.getElementById('map'), {
 			center: new google.maps.LatLng(49.9569, -119.3787),
 			zoom: 7,
-			styles: mapstyle
+			styles: mapstyle,
+			disableDefaultUI: true,
+		    scaleControl: true,
+		    zoomControl: true,
+		    zoomControlOptions: {
+		      style: google.maps.ZoomControlStyle.LARGE 
+		    }
 		});
 	});
 
