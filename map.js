@@ -297,12 +297,6 @@ function initMap() {
 		  }
 		]
 	});
-	
-	
-	// custom icon
-	var icon = new google.maps.MarkerImage(
-		"images/airplane-marker.png"
-	);
 
 
 	// init info window
@@ -315,8 +309,12 @@ function initMap() {
 
 			// position and label
 			var latlng = {lat: aircraft['Lat'], lng: aircraft['Long']};
-			var label = aircraft['Mdl'];
+			var label = aircraft['Type'];
 
+			// custom icon
+			var icon = new google.maps.MarkerImage(
+				"rotate.php?deg=" + aircraft['Trak'] // rotate to correct heading
+			);
 
 			// create marker
 			var marker = new google.maps.Marker({
@@ -328,7 +326,14 @@ function initMap() {
 
 
 			// info window text
-            infocontent = "<h3>" + label + "</h3>"
+			if (aircraft['From'] == null) {
+				aircraft['From'] = "N/A";
+			}
+			if (aircraft['To'] == null) {
+				aircraft['To'] = "N/A";
+			}
+
+            infocontent = "<h3>" + aircraft['Mdl'] + "</h3>"
             	+"<p><b>ICAO: </b>" + aircraft['Icao'] + "<br>"
             	+"<b>Reg: </b>" + aircraft['Reg'] + "<br />"
             	+"<b>Operator: </b>" + aircraft['Op'] + "<br />"
