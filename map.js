@@ -298,13 +298,15 @@ function initMap() {
 		]
 	});
 	
-	// init info window
- 	var infoWindow = new google.maps.InfoWindow;
 	
 	// custom icon
 	var icon = new google.maps.MarkerImage(
 		"images/airplane-marker.png"
 	);
+
+
+	// init info window
+ 	var infoWindow = new google.maps.InfoWindow;
 
 	// create markers for each plane
 	$.getJSON('map.php', function(data){
@@ -324,6 +326,7 @@ function initMap() {
 				icon: icon
 			});
 
+
 			// info window text
             infocontent = "<h3>" + label + "</h3>"
             	+"<p><b>ICAO: </b>" + aircraft['Icao'] + "<br>"
@@ -335,14 +338,23 @@ function initMap() {
             	+"<b>Altitude: </b>" + aircraft['Alt'] + "<br />"
             	+"<b>Track: </b>" + aircraft['Trak'] + "</p>";
 
-
-            // Code to show info window when clicked
-            marker.addListener('click', function() {
-            	infoWindow.setContent(infocontent);
-            	infoWindow.open(map, marker);
- 			});
+            // add listener for infowindow
+ 			bindInfoWindow(marker, map, infoWindow, infocontent); 
 		});
 
 
 	});
 }
+
+function refreshMap() {
+	setInterval(function() {
+		initMap();
+	}, 30000);
+}
+
+function bindInfoWindow(marker, map, infowindow, html) {
+    marker.addListener('click', function() {
+        infowindow.setContent(html);
+        infowindow.open(map, this);
+    });
+} 

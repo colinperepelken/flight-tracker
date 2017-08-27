@@ -17,6 +17,9 @@
 </head>
 <body>
 	<h1>Flight Tracker</h1>
+	<p><i>Created by Colin Bernard</i></p>
+	<p>Flight data is refreshed every 30 seconds. Data is provided by a co-op of ADS-B/Mode S/MLAT feeders. As this data is community driven, not all aircraft may be reported. All reported flights within 500km of CYLW (Kelowna Airport) are shown. Click an aircraft for more information.
+	<p><strong>This is a work in progress</strong></p> 
 	<div id="map">
 		<!-- map rendered here -->
 	</div>
@@ -24,5 +27,9 @@
 	<script async defer
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ_3BKxqS5_SS41sUchUUfd6Sq4jiY6-A&callback=initMap">
 	</script>
+	<script>
+		refreshMap();
+	</script>
+	<p>Data provided by <a href="https://www.adsbexchange.com/">ADS-B Exchange</a></p>
 </body>
 </html>
