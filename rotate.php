@@ -1,6 +1,6 @@
 <?php
 
-$degrees = $_GET['deg'];
+$degrees = 360 - $_GET['deg'];
 
 $icon = "images/airplane-marker.png";
 $im = imagecreatefrompng($icon);

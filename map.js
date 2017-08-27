@@ -359,9 +359,8 @@ function addMarker(aircraft) {
         	+"<b>Operator: </b>" + aircraft['Op'] + "<br />"
         	+"<b>From: </b>" + aircraft['From'] + "<br />"
         	+"<b>To: </b>" + aircraft['To'] + "<br />"
-        	+"<b>Speed: </b>" + aircraft['Spd'] + " knots<br />"
-        	+"<b>Altitude: </b>" + aircraft['Alt'] + "<br />"
-        	+"<b>Track: </b>" + aircraft['Trak'] + "</p>";
+        	+"<b>Speed: </b>" + aircraft['Spd'] + " kts<br />"
+        	+"<b>Altitude: </b>" + aircraft['Alt'] + " ft</p>";
 
         // add listener for infowindow
 		bindInfoWindow(marker, map, infoWindow, infocontent); 
