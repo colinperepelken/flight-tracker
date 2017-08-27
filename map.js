@@ -316,6 +316,24 @@ function initMap() {
 }
 
 function addMarker(aircraft) {
+
+	var aircraftImages = [
+		"images/jet.png",
+		"images/turboprop_wing.png",
+		"images/prop_nose.png"
+	];
+
+	// select correct aircraft image
+	// TODO: tidy this up, add more images/checks
+	var aircraftImage = aircraftImages[0]; // default is jet
+	if (aircraft['EngType'] == 3) {
+		aircraftImage = aircraftImages[0];
+	} else if (aircraft['EngType'] == 1) {
+		aircraftImage = aircraftImages[2];
+	} else if (aircraft['EngType'] == 2 || aircraft['EngMount'] == 5 || aircraft['EngMount'] == 2) {
+		aircraftImage = aircraftImages[1];
+	}
+
 	// position and label
 	var latlng = {lat: aircraft['Lat'], lng: aircraft['Long']};
 	var label = aircraft['Type'];
@@ -326,7 +344,7 @@ function addMarker(aircraft) {
 
 		// custom aircraft icon
 		var customIcon = {
-			url: "rotate.php?deg=" + aircraft['Trak'], // rotate to correct heading
+			url: "rotate.php?deg=" + aircraft['Trak'] + "&img=" + aircraftImage, // rotate to correct heading
 			labelOrigin: new google.maps.Point(this.width/2, this.height + 5) // label offset
 		};
 
@@ -366,7 +384,7 @@ function addMarker(aircraft) {
 		bindInfoWindow(marker, map, infoWindow, infocontent); 
 
 	};
-	img.src = "rotate.php?deg=" + aircraft['Trak']; // set img src (calls above listener function)
+	img.src = "rotate.php?deg=" + aircraft['Trak'] + "&img=" + aircraftImage; // set img src (calls above listener function)
 }
 
 function refreshMap() {

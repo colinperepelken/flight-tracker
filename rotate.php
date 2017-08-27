@@ -2,7 +2,7 @@
 
 $degrees = 360 - $_GET['deg'];
 
-$icon = "images/airplane-marker.png";
+$icon = $_GET['img'];
 $im = imagecreatefrompng($icon);
 imagesavealpha($im , true);
 $pngTransparency = imagecolorallocatealpha($im , 0, 0, 0, 127);
