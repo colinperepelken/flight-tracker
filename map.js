@@ -311,40 +311,49 @@ function initMap() {
 			var latlng = {lat: aircraft['Lat'], lng: aircraft['Long']};
 			var label = aircraft['Type'];
 
-			// custom icon
-			var icon = new google.maps.MarkerImage(
-				"rotate.php?deg=" + aircraft['Trak'] // rotate to correct heading
-			);
+			// custom aircraft icon
 
-			// create marker
-			var marker = new google.maps.Marker({
-				map: map,
-				position: latlng,
-				label: {text: label, color:"orange"},
-				icon: icon
-			});
+			var img = new Image();
+			img.onload = function() {
+
+				var customIcon = {
+					url: "rotate.php?deg=" + aircraft['Trak'], // rotate to correct heading
+					labelOrigin: new google.maps.Point(this.width/2, this.height + 5) // label offset
+				};
+
+				// create marker
+				var marker = new google.maps.Marker({
+					map: map,
+					position: latlng,
+					label: {text: label, color:"orange"},
+					icon: customIcon
+				});
 
 
-			// info window text
-			if (aircraft['From'] == null) {
-				aircraft['From'] = "N/A";
-			}
-			if (aircraft['To'] == null) {
-				aircraft['To'] = "N/A";
-			}
+				// info window text
+				if (aircraft['From'] == null) {
+					aircraft['From'] = "N/A";
+				}
+				if (aircraft['To'] == null) {
+					aircraft['To'] = "N/A";
+				}
 
-            infocontent = "<h3>" + aircraft['Mdl'] + "</h3>"
-            	+"<p><b>ICAO: </b>" + aircraft['Icao'] + "<br>"
-            	+"<b>Reg: </b>" + aircraft['Reg'] + "<br />"
-            	+"<b>Operator: </b>" + aircraft['Op'] + "<br />"
-            	+"<b>From: </b>" + aircraft['From'] + "<br />"
-            	+"<b>To: </b>" + aircraft['To'] + "<br />"
-            	+"<b>Speed: </b>" + aircraft['Spd'] + " knots<br />"
-            	+"<b>Altitude: </b>" + aircraft['Alt'] + "<br />"
-            	+"<b>Track: </b>" + aircraft['Trak'] + "</p>";
+	            infocontent = "<h3>" + aircraft['Mdl'] + "</h3>"
+	            	+"<p><b>ICAO: </b>" + aircraft['Icao'] + "<br>"
+	            	+"<b>Reg: </b>" + aircraft['Reg'] + "<br />"
+	            	+"<b>Operator: </b>" + aircraft['Op'] + "<br />"
+	            	+"<b>From: </b>" + aircraft['From'] + "<br />"
+	            	+"<b>To: </b>" + aircraft['To'] + "<br />"
+	            	+"<b>Speed: </b>" + aircraft['Spd'] + " knots<br />"
+	            	+"<b>Altitude: </b>" + aircraft['Alt'] + "<br />"
+	            	+"<b>Track: </b>" + aircraft['Trak'] + "</p>";
 
-            // add listener for infowindow
- 			bindInfoWindow(marker, map, infoWindow, infocontent); 
+	            // add listener for infowindow
+	 			bindInfoWindow(marker, map, infoWindow, infocontent); 
+
+			};
+			img.src = "rotate.php?deg=" + aircraft['Trak']; 
+
 		});
 
 
