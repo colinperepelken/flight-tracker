@@ -1,8 +1,10 @@
 
-
+var allMarkers = []; // array of all markers
+var infoWindow; // declared so there can only be one infowindow open at a time
+var map;
 
 function initMap() {
-	var map = new google.maps.Map(document.getElementById('map'), {
+	map = new google.maps.Map(document.getElementById('map'), {
 		center: new google.maps.LatLng(49.9569, -119.3787),
 		zoom: 7,
 		styles: [
@@ -300,64 +302,72 @@ function initMap() {
 
 
 	// init info window
- 	var infoWindow = new google.maps.InfoWindow;
+ 	infoWindow = new google.maps.InfoWindow;
 
 	// create markers for each plane
 	$.getJSON('map.php', function(data){
 		console.log(data);
 		data['acList'].forEach(function(aircraft){
-
-			// position and label
-			var latlng = {lat: aircraft['Lat'], lng: aircraft['Long']};
-			var label = aircraft['Type'];
-
-			// custom aircraft icon
-
-			var img = new Image();
-			img.onload = function() {
-
-				var customIcon = {
-					url: "rotate.php?deg=" + aircraft['Trak'], // rotate to correct heading
-					labelOrigin: new google.maps.Point(this.width/2, this.height + 5) // label offset
-				};
-
-				// create marker
-				var marker = new google.maps.Marker({
-					map: map,
-					position: latlng,
-					label: {text: label, color:"orange"},
-					icon: customIcon
-				});
-
-
-				// info window text
-				if (aircraft['From'] == null) {
-					aircraft['From'] = "N/A";
-				}
-				if (aircraft['To'] == null) {
-					aircraft['To'] = "N/A";
-				}
-
-	            infocontent = "<h3>" + aircraft['Mdl'] + "</h3>"
-	            	+"<p><b>ICAO: </b>" + aircraft['Icao'] + "<br>"
-	            	+"<b>Reg: </b>" + aircraft['Reg'] + "<br />"
-	            	+"<b>Operator: </b>" + aircraft['Op'] + "<br />"
-	            	+"<b>From: </b>" + aircraft['From'] + "<br />"
-	            	+"<b>To: </b>" + aircraft['To'] + "<br />"
-	            	+"<b>Speed: </b>" + aircraft['Spd'] + " knots<br />"
-	            	+"<b>Altitude: </b>" + aircraft['Alt'] + "<br />"
-	            	+"<b>Track: </b>" + aircraft['Trak'] + "</p>";
-
-	            // add listener for infowindow
-	 			bindInfoWindow(marker, map, infoWindow, infocontent); 
-
-			};
-			img.src = "rotate.php?deg=" + aircraft['Trak']; 
-
+			addMarker(aircraft);
 		});
 
 
 	});
+}
+
+function addMarker(aircraft) {
+	// position and label
+	var latlng = {lat: aircraft['Lat'], lng: aircraft['Long']};
+	var label = aircraft['Type'];
+
+	// load the icon image so height and width can be extracted
+	var img = new Image();
+	img.onload = function() {
+
+		// custom aircraft icon
+		var customIcon = {
+			url: "rotate.php?deg=" + aircraft['Trak'], // rotate to correct heading
+			labelOrigin: new google.maps.Point(this.width/2, this.height + 5) // label offset
+		};
+
+		// create marker
+		var marker = new google.maps.Marker({
+			map: map,
+			position: latlng,
+			label: {
+				text: label, 
+				color:"orange",
+				fontFamily: "Lato"
+			},
+			icon: customIcon
+		});
+
+		allMarkers.push({reg: aircraft['Reg'], marker: marker});
+
+
+		// info window text
+		if (aircraft['From'] == null) {
+			aircraft['From'] = "N/A";
+		}
+		if (aircraft['To'] == null) {
+			aircraft['To'] = "N/A";
+		}
+
+        infocontent = "<h3>" + aircraft['Mdl'] + "</h3>"
+        	+"<p><b>ICAO: </b>" + aircraft['Icao'] + "<br>"
+        	+"<b>Reg: </b>" + aircraft['Reg'] + "<br />"
+        	+"<b>Operator: </b>" + aircraft['Op'] + "<br />"
+        	+"<b>From: </b>" + aircraft['From'] + "<br />"
+        	+"<b>To: </b>" + aircraft['To'] + "<br />"
+        	+"<b>Speed: </b>" + aircraft['Spd'] + " knots<br />"
+        	+"<b>Altitude: </b>" + aircraft['Alt'] + "<br />"
+        	+"<b>Track: </b>" + aircraft['Trak'] + "</p>";
+
+        // add listener for infowindow
+		bindInfoWindow(marker, map, infoWindow, infocontent); 
+
+	};
+	img.src = "rotate.php?deg=" + aircraft['Trak']; // set img src (calls above listener function)
 }
 
 function refreshMap() {
